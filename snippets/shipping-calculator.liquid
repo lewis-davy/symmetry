@@ -53,9 +53,9 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 Shopify.Cart.ShippingCalculator.show( {
   submitButton: {{ 'cart.shipping_calculator.submit' | t | json }},
-  submitButtonDisabled: {{ 'cart.shipping_calculator.loading' | t | json }}{% if shop.customer_accounts_enabled and customer %},
-  customerIsLoggedIn: true{% endif %},
-  moneyFormat: {{ shop.money_with_currency_format | json }}
+  submitButtonDisabled: {{ 'cart.shipping_calculator.loading' | t | json }},
+  {% if shop.customer_accounts_enabled and customer %}customerIsLoggedIn: true,{% endif %}
+  moneyFormat: theme.money_format_with_cart_code_preference
 } );
 });
 </script>

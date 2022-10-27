@@ -10,11 +10,11 @@
 <div class="section-id-{{ section.id }} collection-slider-row {% if section.settings.use_alt_bg %}use-alt-bg{% endif %}" data-section-type="featured-collection" data-components="accordion,modal,price-range">
   <div class="container{% if section.settings.enable_carousel %} container--not-mobile{% endif %}{% if section.settings.full_width %} container--no-max{% endif %}">
     <div class="{% if section.settings.enable_carousel %}collection-slider{% endif %}">
-      <h1 class="hometitle h4-style align-center has-paging" data-cc-animate data-cc-animate-delay="0.3s">
-        {% if section.settings.enable_carousel %}<a class="prev" href="#">{% render 'svg-chevron-left' %}</a>{% endif %}
+      <h2 class="hometitle h4-style align-center has-paging" data-cc-animate data-cc-animate-delay="0.3s">
+        {% if section.settings.enable_carousel %}<a class="prev ltr-icon" href="#">{% render 'svg-chevron-left' %}</a>{% endif %}
         <a class="has-paging__title" href="{{ collection.url }}"><span>{{ section.settings.title | escape }}</span></a>
-        {% if section.settings.enable_carousel %}<a class="next" href="#">{% render 'svg-chevron-right' %}</a>{% endif %}
-      </h1>
+        {% if section.settings.enable_carousel %}<a class="next ltr-icon" href="#">{% render 'svg-chevron-right' %}</a>{% endif %}
+      </h2>
 
       {%- if section.settings.show_view_all -%}
         <div class="view-all align-center" data-cc-animate data-cc-animate-delay="0.3s">
@@ -23,7 +23,7 @@
       {%- endif -%}
 
       <div class="collection-listing" data-cc-animate="cc-fade-in-up">
-        <div class="product-list product-list--per-row-{{ section.settings.grid }} product-list--image-shape-{{ settings.prod_thumb_shape }} {% if section.settings.enable_carousel %}carousel{% endif %}">
+        <div class="product-list product-list--per-row-{{ section.settings.grid }} product-list--per-row-mob-{{ settings.prod_thumb_mob_per_row }} product-list--image-shape-{{ settings.prod_thumb_shape }} {% if section.settings.enable_carousel %}carousel{% endif %}">
           {% if section.settings.collection == blank %}
             {% for i in (1..product_limit) %}
               {% render 'onboarding-product-block', forloop: forloop %}
@@ -36,7 +36,9 @@
                 assign chosen_aspect_ratio = 0.8
               elsif settings.prod_thumb_shape == 'square'
                 assign chosen_aspect_ratio = 1.0
-              elsif settings.prod_thumb_shape == 'landscape'
+              elsif settings.prod_thumb_shape == 'landscape-54'
+                assign chosen_aspect_ratio = 1.25
+              elsif settings.prod_thumb_shape == 'landscape-32'
                 assign chosen_aspect_ratio = 1.50
               elsif settings.prod_thumb_shape == 'tallest'
                 assign chosen_aspect_ratio = 99
@@ -141,7 +143,6 @@
     "presets": [
       {
         "name": "Featured collection",
-        "category": "Collection",
         "settings": {
           "title": "Featured collection"
         }

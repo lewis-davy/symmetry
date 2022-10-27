@@ -87,7 +87,7 @@
             {%- endif -%}
 
             {%- if block.settings.title != blank -%}
-              <h1 class="majortitle in-content">{{ block.settings.title | escape }}</h1>
+              <h2 class="majortitle h1-style in-content">{{ block.settings.title | escape }}</h2>
             {%- endif -%}
 
             <div class="rte {% if block.settings.enlarge_text %}large-text{% endif %}">{{ block.settings.text }}</div>
@@ -310,7 +310,7 @@
           {
             "type": "select",
             "id": "text_alignment",
-            "label": "Text alignment",
+            "label": "Text overlay position",
             "options": [
               {
                 "value": "top left",
@@ -365,7 +365,7 @@
             "id": "overlay_style",
             "type": "select",
             "label": "Overlay style",
-            "default": "full",
+            "default": "shadow",
             "options": [
               {
                 "value": "full",
@@ -374,6 +374,14 @@
               {
                 "value": "box",
                 "label": "Box"
+              },
+              {
+                "value": "shadow",
+                "label": "Text shadow"
+              },
+              {
+                "value": "full image-overlay--bg-shadow",
+                "label": "Text shadow and tint"
               },
               {
                 "value": "no_background",
@@ -581,7 +589,6 @@
     "presets": [
       {
         "name": "Custom content",
-        "category": "Advanced layout",
         "settings": {
             "alignment": "middle"
         },

@@ -1,7 +1,14 @@
 <div class="{% unless section.settings.full_width %}article{% endunless %} {% if section.settings.use_alt_bg %}use-alt-bg fully-padded-row--{{ section.settings.height }}{% else %}fully-spaced-row--{{ section.settings.height }}{% endif %}" data-cc-animate>
   <div class="container">
     <div class="align-{{ section.settings.text_alignment }} spaced-column">
+      {% assign skip_block_count = 0 %}
       {% for block in section.blocks %}
+        {%- liquid
+          if skip_block_count > 0
+            assign skip_block_count = skip_block_count | minus: 1
+            continue
+          endif
+        -%}
         {% case block.type %}
           {% when 'heading' %}
             {% if block.settings.use_h1 %}
@@ -17,8 +24,15 @@
             <div class="rte lightly-spaced-row {% if block.settings.enlarge_text %}large-text{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
 
           {% when 'button' %}
-            <div class="lightly-spaced-row-above" {{ block.shopify_attributes }}>
-              <a class="{% if block.settings.button_style != 'link' %}btn btn--{{ block.settings.button_style }}{% else %}small-feature-link{% endif %}" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }}</a>
+            <div class="lightly-spaced-row-above button-row" {{ block.shopify_attributes }}>
+              <a class="{% if block.settings.button_style != 'link' %}btn btn--{{ block.settings.button_style }}{% else %}small-feature-link{% endif %} button-row__button" href="{{ block.settings.button_link }}">{{ block.settings.button_label | escape }}</a>
+              {%- assign skip_block_count = 0 -%}
+              {%- for next_block in section.blocks offset: forloop.index -%}
+                {%- if next_block.type == 'button' -%}
+                  {%- assign skip_block_count = skip_block_count | plus: 1 -%}
+                  <a class="{% if next_block.settings.button_style != 'link' %}btn btn--{{ next_block.settings.button_style }}{% else %}small-feature-link{% endif %} button-row__button" href="{{ next_block.settings.button_link }}" {{ block.shopify_attributes }}>{{ next_block.settings.button_label | escape }}</a>
+                {%- endif -%}
+              {%- endfor -%}
             </div>
 
           {% when 'image' %}
@@ -37,33 +51,7 @@
           {% when 'icon' %}
             <div class="lightly-spaced-row" {{ block.shopify_attributes }}>
               <span class="large-light-icon">
-                {% if block.settings.icon == 'chat' %}
-                  {% render 'icon-chat' %}
-                {% elsif block.settings.icon == 'delivery' %}
-                  {% render 'icon-delivery' %}
-                {% elsif block.settings.icon == 'email' %}
-                  {% render 'icon-email' %}
-                {% elsif block.settings.icon == 'gift' %}
-                  {% render 'icon-gift' %}
-                {% elsif block.settings.icon == 'heart' %}
-                  {% render 'icon-heart' %}
-                {% elsif block.settings.icon == 'label' %}
-                  {% render 'icon-label' %}
-                {% elsif block.settings.icon == 'location' %}
-                  {% render 'icon-location' %}
-                {% elsif block.settings.icon == 'lock' %}
-                  {% render 'icon-lock' %}
-                {% elsif block.settings.icon == 'people' %}
-                  {% render 'icon-people' %}
-                {% elsif block.settings.icon == 'question' %}
-                  {% render 'icon-question' %}
-                {% elsif block.settings.icon == 'smile' %}
-                  {% render 'icon-smile' %}
-                {% elsif block.settings.icon == 'star' %}
-                  {% render 'icon-star' %}
-                {% elsif block.settings.icon == 'telephone' %}
-                  {% render 'icon-telephone' %}
-                {% endif %}
+                {% render 'icon', icon: block.settings.icon, size: 'medium' %}
               </span>
             </div>
 
@@ -147,7 +135,7 @@
             "type": "checkbox",
             "id": "use_h1",
             "label": "Set as primary page heading",
-            "info": "Uses <h1> tag (used for SEO and accessibility). One per page recommended.",
+            "info": "Use <h1> tag. One per page recommended. [Read more](https://cleancanvas.co.uk/support/symmetry/section-h1-setting)",
             "default": false
           }
         ]
@@ -178,7 +166,7 @@
             "type": "checkbox",
             "id": "enlarge_text",
             "label": "Enlarge text",
-            "default": false
+            "default": true
           }
         ]
       },
@@ -186,6 +174,10 @@
         "type": "button",
         "name": "Button",
         "settings": [
+          {
+            "type": "paragraph",
+            "content": "Consecutive buttons will show on the same row"
+          },
           {
             "type": "text",
             "id": "button_label",
@@ -230,16 +222,56 @@
             "default": "star",
             "options": [
               {
-                "value": "chat",
-                "label": "Chat"
+                "value": "award",
+                "label": "Award"
               },
               {
-                "value": "delivery",
-                "label": "Delivery"
+                "value": "box",
+                "label": "Box"
               },
               {
-                "value": "email",
-                "label": "Email"
+                "value": "briefcase",
+                "label": "Briefcase"
+              },
+              {
+                "value": "calendar",
+                "label": "Calendar"
+              },
+              {
+                "value": "chat_bubble",
+                "label": "Chat bubble"
+              },
+              {
+                "value": "check_mark",
+                "label": "Check mark"
+              },
+              {
+                "value": "check_mark_in_circle",
+                "label": "Check mark in circle"
+              },
+              {
+                "value": "clock",
+                "label": "Clock"
+              },
+              {
+                "value": "credit_card",
+                "label": "Credit card"
+              },
+              {
+                "value": "dollar_sign",
+                "label": "Dollar sign"
+              },
+              {
+                "value": "dryer",
+                "label": "Dryer"
+              },
+              {
+                "value": "eye",
+                "label": "Eye"
+              },
+              {
+                "value": "feather",
+                "label": "Feather"
               },
               {
                 "value": "gift",
@@ -250,36 +282,80 @@
                 "label": "Heart"
               },
               {
-                "value": "label",
-                "label": "Label"
+                "value": "iron",
+                "label": "Iron"
               },
               {
-                "value": "location",
-                "label": "Location"
+                "value": "leaf",
+                "label": "Leaf"
+              },
+              {
+                "value": "leather",
+                "label": "Leather"
               },
               {
                 "value": "lock",
                 "label": "Lock"
               },
               {
-                "value": "people",
-                "label": "People"
+                "value": "map_pin",
+                "label": "Map pin"
               },
               {
-                "value": "question",
-                "label": "Question"
+                "value": "pants",
+                "label": "Pants"
               },
               {
-                "value": "smile",
-                "label": "Smile"
+                "value": "percent",
+                "label": "Percent"
+              },
+              {
+                "value": "plane",
+                "label": "Plane"
+              },
+              {
+                "value": "price_tag",
+                "label": "Price tag"
+              },
+              {
+                "value": "question_mark",
+                "label": "Question mark"
+              },
+              {
+                "value": "return",
+                "label": "Return"
+              },
+              {
+                "value": "ruler",
+                "label": "Ruler"
+              },
+              {
+                "value": "scissors",
+                "label": "Scissors"
+              },
+              {
+                "value": "shirt",
+                "label": "Shirt"
+              },
+              {
+                "value": "shoe",
+                "label": "Shoe"
+              },
+              {
+                "value": "silhouette",
+                "label": "Silhouette"
               },
               {
                 "value": "star",
                 "label": "Star"
               },
               {
-                "value": "telephone",
-                "label": "Telephone"
+                "value": "truck",
+                "label": "Truck"
+              },
+              {
+                "value": "washing",
+                "label": "Washing"
               }
             ]
           }
@@ -315,12 +391,8 @@
     "presets": [
       {
         "name": "Rich text",
-        "category": "Text",
         "settings": {},
         "blocks": [
-          {
-            "type": "subheading"
-          },
           {
             "type": "heading"
           },

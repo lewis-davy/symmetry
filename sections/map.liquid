@@ -27,7 +27,7 @@
           <h2>{{ section.settings.heading | escape }}</h2>
         {% endif %}
         {% if section.settings.address != blank %}
-          <div class="rte">{{ section.settings.address }}</div>
+          <div class="rte lightly-spaced-row">{{ section.settings.address }}</div>
         {% endif %}
         {% if section.settings.button != blank and section.settings.map_address != blank %}
           <div>
@@ -201,8 +201,7 @@
     ],
     "presets": [
       {
-        "name": "Map",
-        "category": "Store information"
+        "name": "Map"
       }
     ]
   }

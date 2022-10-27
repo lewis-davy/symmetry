@@ -1,7 +1,6 @@
 <div class="product-block onboarding">
   <div class="block-inner">
-    <div class="product-link" href="{{ collection.url }}">
-
+    <div class="product-link">
       <div class="image-cont">
         {% capture placeholder_svg_name %}product-{{ forloop.index | modulo: 6 | plus: 1 }}{% endcapture %}
         <div class="placeholder-image">{{ placeholder_svg_name | placeholder_svg_tag }}</div>
@@ -12,7 +11,11 @@
           <div class="innerer">
             <div class="product-block__title">{{ 'onboarding.product.product_title' | t }}</div>
             <span class="price">
-              {{ 1234 | money }}
+              {%- if settings.product_currency_code_enabled -%}
+                {{- 1234 | money_with_currency -}}
+              {%- else -%}
+                {{- 1234 | money -}}
+              {%- endif -%}
             </span>
           </div>
         </div>

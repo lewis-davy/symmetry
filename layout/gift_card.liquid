@@ -1,10 +1,17 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+{%- liquid
+  assign rtl_langs = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi' | split: ','
+  if rtl_langs contains localization.language.iso_code
+    assign lang_dir = 'rtl'
+  else
+    assign lang_dir = 'ltr'
+  endif
+-%}
+<html lang="{{ request.locale.iso_code }}" dir="{{ lang_dir }}">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="{{ settings.btn_col }}">
   <link rel="canonical" href="{{ canonical_url }}">
 
   {% if settings.favicon != blank and settings.favicon contains '.png' %}

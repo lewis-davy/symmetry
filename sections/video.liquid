@@ -1,8 +1,14 @@
 <div id="section-id-{{ section.id }}" class="{% unless section.settings.full_width %}container fully-spaced-row{% endunless %}" data-section-type="video">
   {% style %}
+    #section-id-{{ section.id }} .overlay-text__title {
+      font-size: {{ section.settings.title_size_mobile }}px;
+      {%- if section.settings.title_size_mobile >= 90 -%}
+      line-height: 1em;
+      {%- endif %}
+    }
     @media (min-width: 768px) {
       #section-id-{{ section.id }} .overlay-text__title {
-        {%- assign title_size_medium = section.settings.title_size | times: 0.7 | at_least: settings.font_size_heading_int -%}
+        {%- assign title_size_medium = section.settings.title_size | times: 0.7 | at_least: section.settings.title_size_mobile -%}
         font-size: {{ title_size_medium }}px;
         {%- if title_size_medium >= 90 -%}
         line-height: 1em;
@@ -58,7 +64,11 @@
               <div class="overlay-text__subheading subheading subheading--over">{{ section.settings.subheading | escape }}</div>
             {%- endif -%}
             {%- if section.settings.video_title != blank -%}
-              <h2 class="overlay-text__title h1-style">{{ section.settings.video_title | newline_to_br }}</h2>
+              {% if section.settings.use_h1 %}
+                <h1 class="overlay-text__title">{{ section.settings.video_title | newline_to_br }}</h1>
+              {% else %}
+                <h2 class="overlay-text__title h1-style">{{ section.settings.video_title | newline_to_br }}</h2>
+              {% endif %}
             {%- endif -%}
             {%- if section.settings.text != blank -%}
               <div class="overlay-text__rte rte {% if section.settings.enlarge_text %}large-text{% endif %} lightly-spaced-row">{{ section.settings.text }}</div>
@@ -90,13 +100,14 @@
       {
         "type": "text",
         "id": "subheading",
-        "label": "Subheading"
+        "label": "Subheading",
+        "default": "Tell your story"
       },
       {
         "type": "textarea",
         "id": "video_title",
         "label": "Heading",
-        "default": "Video"
+        "default": "Featured video"
       },
       {
         "type": "range",
@@ -105,8 +116,25 @@
         "max": 150,
         "step": 2,
         "unit": "px",
-        "label": "Heading text size",
-        "default": 34
+        "label": "Desktop heading text size",
+        "default": 84
+      },
+      {
+        "type": "range",
+        "id": "title_size_mobile",
+        "min": 20,
+        "max": 150,
+        "step": 2,
+        "unit": "px",
+        "label": "Mobile heading text size",
+        "default": 46
+      },
+      {
+        "type": "checkbox",
+        "id": "use_h1",
+        "label": "Set as primary page heading",
+        "info": "Use <h1> tag. One per page recommended. [Read more](https://cleancanvas.co.uk/support/symmetry/section-h1-setting)",
+        "default": false
       },
       {
         "type": "richtext",
@@ -118,12 +146,12 @@
         "type": "checkbox",
         "id": "enlarge_text",
         "label": "Enlarge text",
-        "default": false
+        "default": true
       },
       {
         "type": "select",
         "id": "text_alignment",
-        "label": "Text alignment",
+        "label": "Text overlay position",
         "options": [
           {
             "value": "top left",
@@ -228,7 +256,7 @@
         "id": "overlay_style",
         "type": "select",
         "label": "Overlay style",
-        "default": "full",
+        "default": "shadow",
         "options": [
           {
             "value": "full",
@@ -237,6 +265,14 @@
           {
             "value": "box",
             "label": "Box"
+          },
+          {
+            "value": "shadow",
+            "label": "Text shadow"
+          },
+          {
+            "value": "full image-overlay--bg-shadow",
+            "label": "Text shadow and tint"
           },
           {
             "value": "no_background",
@@ -248,7 +284,6 @@
     "presets": [
       {
         "name": "Video",
-        "category": "Video",
         "settings": {
           "video": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
         }

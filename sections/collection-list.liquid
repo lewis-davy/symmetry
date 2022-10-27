@@ -1,17 +1,17 @@
 <div class="section-id-{{ section.id }} collection-slider-row for-collections {% if section.settings.use_alt_bg %}use-alt-bg{% endif %}" data-section-type="featured-collections">
   <div class="container{% if section.settings.enable_carousel %} container--not-mobile{% endif %}{% if section.settings.full_width %} container--no-max{% endif %}">
     <div class="{% if section.settings.enable_carousel %}collection-slider{% endif %}">
-      <h1 class="hometitle h4-style align-center has-paging" data-cc-animate>
-        {% if section.settings.enable_carousel %}<a class="prev" href="#">{% render 'svg-chevron-left' %}</a>{% endif %}
+      <h2 class="hometitle h4-style align-center has-paging" data-cc-animate>
+        {% if section.settings.enable_carousel %}<a class="prev ltr-icon" href="#">{% render 'svg-chevron-left' %}</a>{% endif %}
         {% if section.settings.title == blank %}
           <span class="has-paging__title">&nbsp;</span>
         {% else %}
           <span class="has-paging__title">{{ section.settings.title | escape }}</span>
         {% endif %}
-        {% if section.settings.enable_carousel %}<a class="next" href="#">{% render 'svg-chevron-right' %}</a>{% endif %}
-      </h1>
+        {% if section.settings.enable_carousel %}<a class="next ltr-icon" href="#">{% render 'svg-chevron-right' %}</a>{% endif %}
+      </h2>
       <div class="collection-listing" data-cc-animate="cc-fade-in-up">
-        <div class="product-list product-list--per-row-{{ section.settings.grid }} product-list--image-shape-{{ settings.coll_grid_image_shape }} {% if section.settings.enable_carousel %}carousel{% endif %}">
+        <div class="product-list product-list--per-row-{{ section.settings.grid }} product-list--per-row-mob-{{ settings.prod_thumb_mob_per_row }} product-list--image-shape-{{ settings.coll_grid_image_shape }} {% if section.settings.enable_carousel %}carousel{% endif %}">
           {% if section.blocks.size > 0 %}
             {%- liquid
               if settings.coll_grid_image_shape == 'portrait-23'
@@ -20,7 +20,9 @@
                 assign chosen_aspect_ratio = 0.8
               elsif settings.coll_grid_image_shape == 'square'
                 assign chosen_aspect_ratio = 1.0
-              elsif settings.coll_grid_image_shape == 'landscape'
+              elsif settings.coll_grid_image_shape == 'landscape-54'
+                assign chosen_aspect_ratio = 1.25
+              elsif settings.coll_grid_image_shape == 'landscape-32'
                 assign chosen_aspect_ratio = 1.50
               elsif settings.coll_grid_image_shape == 'tallest'
                 assign chosen_aspect_ratio = 999
@@ -132,7 +134,6 @@
     "presets": [
       {
         "name": "Collection list",
-        "category": "Collection",
         "settings": {
         },
         "blocks": [

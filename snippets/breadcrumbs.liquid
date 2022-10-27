@@ -1,10 +1,17 @@
 {%- comment -%}
-  Syntax:
-  {% render 'breadcrumbs', slash_divider, show_next_prev %}
-
   Parameters:
-  - slash_divider (optional) - Renders a '/' character for the divider icon. Default is chevron.
-  - show_next_prev (optional) - Whether to show next and previous product links. Default is false.
+  - show_collection_listing_link {boolean} [optional] - Whether to show the collections list link. Default is false.
+  - show_next_prev {boolean} [optional] - Whether to show next/previous product links (product template). Default is false.
+  - show_rss_link {boolean} [optional] - Whether to show an rss link (blog template). Default is false.
+  - divider {string} [optional] - Markup to use for the divider.
+  - prev_icon {string} [optional] - Markup to use for the previous (product) button.
+  - next_icon {string} [optional] - Markup to use for the next (product) button.
+
+  Example usage:
+  {%- capture divider -%}
+    <span class="feather-icon">{% render 'feather-chevron-right' %}</span>
+  {%- endcapture -%}
+  {% render 'breadcrumbs', divider: divider, show_next_prev: true %}
 {%- endcomment -%}
 
 {%- liquid
@@ -42,9 +49,17 @@ endif
   {%- capture blog_tag_url -%}{{ blog.url }}/tagged/{{ current_tags | join: "+" }}{%- endcapture -%}
 {%- endif -%}
 
-{%- capture divider -%}
-  <span class="icon">{%- if slash_divider -%}/{%- else -%}{% render 'svg-chevron-right' %}{%- endif -%}</span>
-{%- endcapture -%}
+{%- unless divider -%}
+  {%- capture divider -%}<span class="icon">{% render 'svg-chevron-right' %}</span>{%- endcapture -%}
+{%- endunless -%}
+
+{%- unless prev_icon -%}
+  {%- capture prev_icon -%}<span class="icon">{% render 'svg-chevron-left' %}</span>{%- endcapture -%}
+{%- endunless -%}
+
+{%- unless next_icon -%}
+  {%- capture next_icon -%}<span class="icon">{% render 'svg-chevron-right' %}</span>{%- endcapture -%}
+{%- endunless -%}
 
 {%- capture crumbs_structured_data -%}
 <script type="application/ld+json">
@@ -217,12 +232,12 @@ endif
     <div class="breadcrumbs-prod-nav">
       {%- if collection.previous_product -%}
         <a class="breadcrumbs-prod-nav__link breadcrumbs-prod-nav__link--prev" href="{{ collection.previous_product.url }}" title="{{ collection.previous_product.title | escape }}">
-          <span class="icon">{% render 'svg-chevron-left' %}</span> <span class="breadcrumbs-prod-nav__text">{{ 'products.product.prev_product' | t }}</span>
+          {{ prev_icon }} <span class="breadcrumbs-prod-nav__text">{{ 'products.product.prev_product' | t }}</span>
         </a>
       {%- endif -%}
       {%- if collection.next_product -%}
         <a class="breadcrumbs-prod-nav__link breadcrumbs-prod-nav__link--next" href="{{ collection.next_product.url }}" title="{{ collection.next_product.title | escape }}">
-          <span class="breadcrumbs-prod-nav__text">{{ 'products.product.next_product' | t }}</span> <span class="icon">{% render 'svg-chevron-right' %}</span>
+          <span class="breadcrumbs-prod-nav__text">{{ 'products.product.next_product' | t }}</span> {{ next_icon }}
         </a>
       {%- endif -%}
     </div>

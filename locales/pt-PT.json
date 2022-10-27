@@ -27,8 +27,10 @@
       "previous": "Anterior",
       "next": "Próxima",
       "skip_to_content": "Pular para o conteúdo",
+      "video_play": "Reproduzir vídeo",
       "video_stop": "Parar o vídeo",
-      "video_play": "Reproduzir vídeo"
+      "star_reviews_info": "{{ rating_value }} de {{ rating_max }} estrelas",
+      "total_reviews": "análises totais"
     },
     "meta": {
       "tags": "Marcado \"{{ tags }}\"",
@@ -66,11 +68,11 @@
       "email_placeholder": "Seu e-mail",
       "submit": "Enviar"
     },
+    "country": {
+      "dropdown_label": "Moeda"
+    },
     "language": {
       "dropdown_label": "Idioma"
-    },
-    "currency": {
-      "dropdown_label": "Moeda"
     },
     "pagination": {
       "previous": "Página anterior",
@@ -100,7 +102,6 @@
       "title": "Carrinho de compras",
       "empty": "Seu carrinho está vazio no momento.",
       "quantity": "Quantidade",
-      "confirm_remove": "Tem certeza de que deseja remover este item?",
       "remove": "Eliminar",
       "subtotal": "Subtotal",
       "taxes_included_and_shipping_policy_html": "Imposto incluído. <a href=\"{{ link }}\">Envio</a> calculado na finalização da compra.",
@@ -142,36 +143,33 @@
     },
     "product": {
       "add_to_cart": "Adicionar ao carrinho",
-      "unit_price_separator": " / ",
+      "pick_a": "Escolha um",
       "adding_to_cart": "Adicionando",
       "added_to_cart": "Adicionado",
       "preorder": "Pedido antecipado",
       "view_in_space": "Ver no seu espaço",
+      "selector_label": "Opções",
+      "no_selection": "Escolha uma opção",
       "include_taxes": "Imposto incluído.",
       "shipping_policy_html": "<a href=\"{{ link }}\">Envio</a> calculado na finalização da compra.",
-      "reviews_link": "Link de comentários",
+      "reviews_link": {
+        "one": "Avaliações",
+        "other": "Avaliações"
+      },
       "description": "Descrição",
       "vendor": "Fornecedor",
       "sku": "SKU:",
-      "size_chart": "Exibir gráfico de tamanho",
-      "selector_label": "Opções",
       "quantity": "Quantidade",
       "product_unavailable": "Indisponível",
       "backorder": "está em espera e será enviado assim que estiver de volta em estoque",
       "prev_product": "Anterior",
-      "next_product": "Próximo"
+      "next_product": "Próximo",
+      "unit_price_separator": " / ",
+      "size_chart": "Exibir gráfico de tamanho"
     },
     "variant": {
       "no_stock": "Esgotado",
       "non_existent": "Indisponível"
-    },
-    "labels": {
-      "only_x_left": "{{ quantity }} em estoque",
-      "sold_out": "Esgotado",
-      "sale": "Em promoção",
-      "percent_reduction": "-{{ amount }}%",
-      "value_reduction_html": "-{{ amount }}",
-      "new_in": "Novo"
     },
     "added_notification": {
       "title": "Adicionado",
@@ -180,9 +178,9 @@
       "quantity": "Quantidade",
       "total_price": "Total",
       "shipping_note": "Excluindo frete",
+      "subtotal": "Subtotal",
       "keep_shopping": "Continue navegando",
-      "cart": "Carrinho",
-      "subtotal": "Subtotal"
+      "cart": "Carrinho"
     },
     "quick_buy": {
       "close": "Perto",
@@ -193,6 +191,17 @@
       "will_not_ship_until": "Envio a partir de {{ date }}",
       "will_be_in_stock_after": "Estará disponível após {{ date }}",
       "waiting_for_stock": "Inventory no caminho"
+    },
+    "labels": {
+      "only_x_left": "{{ quantity }} em estoque",
+      "x_units_available": "{{ quantity }} unidades disponíveis",
+      "low_stock": "Stock limitado",
+      "in_stock": "Em stock",
+      "sold_out": "Esgotado",
+      "sale": "Em promoção",
+      "new_in": "Novo",
+      "percent_reduction": "-{{ amount }}%",
+      "value_reduction_html": "-{{ amount }}"
     }
   },
   "layout": {
@@ -222,6 +231,9 @@
     "header": {
       "cart": "Carrinho",
       "search_submit": "Procurar"
+    },
+    "navigation": {
+      "back": "Anterior"
     },
     "breadcrumbs": {
       "title": "Navegação estrutural",
@@ -286,11 +298,13 @@
     },
     "article": {
       "title": "Título da sua postagem",
-      "excerpt": "A sua loja não publicou ainda qualquer post no blog. Um blog pode ser usado para falar de lançamentos de novos produtos, dicas e outras notícias que deseje partilhar com os seus clientes. Pode dar uma vista de olhos no blog comercial da Shopify para se inspirar e obter alguns conselhos para a sua própria loja e blog.",
+      "excerpt": "Um blog pode ser usado para falar de lançamentos de novos produtos, dicas e outras notícias que deseje partilhar com os seus clientes. Pode dar uma vista de olhos no blog comercial da Shopify para se inspirar e obter alguns conselhos para a sua própria loja e blog.",
       "author": "Nome do autor"
     },
     "product": {
-      "product_title": "Exemplo de título de produto"
+      "product_title": "Exemplo de título de produto",
+      "vendor": "Fornecedor",
+      "sku": "SKU1234"
     },
     "collection": {
       "collection_title": "Exemplo de título de coleção"
@@ -318,42 +332,43 @@
       "no_matches": "A sua loja não publicou ainda qualquer post no blog."
     }
   },
-  "storefront_password": {
-    "login": {
-      "link": "Entre usando a palavra-passe",
-      "label": "Entre usando a palavra-passe:",
-      "button": "Entrar",
-      "admin_link_html": "É o(a) dono(a) da loja? <a href=\"/admin\">Entre aqui</a>"
-    },
-    "signup": {
-      "success": "Nós lhe enviaremos um e-mail logo antes de lançar a loja!"
-    },
-    "general": {
-      "powered_by": "Esta loja será lançada com a tecnologia da"
-    }
-  },
-  "store_availability": {
-    "general": {
-      "pick_up_available_at_html": "Recolha disponível em <strong>{{ location_name }}</strong>",
-      "view_store_info": "Ver informações da loja",
-      "check_other_stores": "Verificar a disponibilidade noutras lojas",
-      "pick_up_unavailable_at_html": "Recolha atualmente indisponível em <strong>{{ location_name }}</strong>",
-      "miles": "mi",
-      "kilometers": "km",
-      "pick_up_available": "Recolha disponível",
-      "pick_up_currently_unavailable": "Recolha atualmente indisponível",
-      "invalid_location_address": "Contacte a loja para confirmar o endereço"
-    }
-  },
   "customer": {
+    "login": {
+      "title": "Entrar",
+      "email": "E-mail",
+      "password": "Palavra-passe",
+      "forgot_password": "Esqueceu sua palavra-passe?",
+      "sign_in": "Entrar",
+      "register": "Criar conta",
+      "guest_title": "Continuar como convidado",
+      "guest_continue": "Continuar"
+    },
+    "recover_password": {
+      "title": "Repor sua palavra-passe",
+      "subtext": "Nós lhe enviaremos um e-mail para repor sua palavra-passe.",
+      "success": "Nós lhe enviamos um e-mail com um link para atualizar sua palavra-passe.",
+      "email": "E-mail",
+      "submit": "Enviar",
+      "cancel": "Cancelar"
+    },
+    "register": {
+      "title": "Criar conta",
+      "first_name": "Nome",
+      "last_name": "Sobrenome",
+      "email": "E-mail",
+      "password": "Palavra-passe",
+      "submit": "Criar",
+      "log_in": "Entrar",
+      "cancel": "Retornar à loja"
+    },
+    "general": {
+      "or": "ou",
+      "return": "Retornar à loja"
+    },
     "account": {
       "title": "Minha conta",
       "view_addresses": "Ver endereços",
       "return": "Retornar às informações da conta"
-    },
-    "general": {
-      "return": "Retornar à loja",
-      "or": "ou"
     },
     "orders": {
       "order_number": "Pedido",
@@ -395,24 +410,6 @@
       "edit_address": "Editar endereço",
       "update": "Atualizar endereço"
     },
-    "login": {
-      "title": "Entrar",
-      "email": "E-mail",
-      "password": "Palavra-passe",
-      "forgot_password": "Esqueceu sua palavra-passe?",
-      "sign_in": "Entrar",
-      "register": "Criar conta",
-      "guest_title": "Continuar como convidado",
-      "guest_continue": "Continuar"
-    },
-    "recover_password": {
-      "title": "Repor sua palavra-passe",
-      "subtext": "Nós lhe enviaremos um e-mail para repor sua palavra-passe.",
-      "success": "Nós lhe enviamos um e-mail com um link para atualizar sua palavra-passe.",
-      "email": "E-mail",
-      "submit": "Enviar",
-      "cancel": "Cancelar"
-    },
     "order": {
       "title": "Pedido {{ name }}",
       "cancelled_on": "Pedido cancelado em {{ date }}",
@@ -432,22 +429,39 @@
       "shipping": "Frete",
       "tax": "Impostos"
     },
-    "register": {
-      "title": "Criar conta",
-      "first_name": "Nome",
-      "last_name": "Sobrenome",
-      "email": "E-mail",
-      "password": "Palavra-passe",
-      "submit": "Criar",
-      "log_in": "Entrar",
-      "cancel": "Retornar à loja"
-    },
     "reset_password": {
       "title": "Repor palavra-passe da conta",
       "subtext": "Digite uma nova palavra-passe para {{ email }}",
       "password": "Palavra-passe",
       "password_confirm": "Confirmar palavra-passe",
       "submit": "Repor palavra-passe"
+    }
+  },
+  "storefront_password": {
+    "login": {
+      "link": "Entre usando a palavra-passe",
+      "label": "Entre usando a palavra-passe:",
+      "button": "Entrar",
+      "admin_link_html": "É o(a) dono(a) da loja? <a href=\"/admin\">Entre aqui</a>"
+    },
+    "signup": {
+      "success": "Nós lhe enviaremos um e-mail logo antes de lançar a loja!"
+    },
+    "general": {
+      "powered_by": "Esta loja será lançada com a tecnologia da"
+    }
+  },
+  "store_availability": {
+    "general": {
+      "pick_up_available_at_html": "Recolha disponível em <strong>{{ location_name }}</strong>",
+      "view_store_info": "Ver informações da loja",
+      "check_other_stores": "Verificar a disponibilidade noutras lojas",
+      "pick_up_unavailable_at_html": "Recolha atualmente indisponível em <strong>{{ location_name }}</strong>",
+      "miles": "mi",
+      "kilometers": "km",
+      "pick_up_available": "Recolha disponível",
+      "pick_up_currently_unavailable": "Recolha atualmente indisponível",
+      "invalid_location_address": "Contacte a loja para confirmar o endereço"
     }
   }
 }

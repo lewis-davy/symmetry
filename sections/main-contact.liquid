@@ -1,4 +1,4 @@
-<div class="container" data-cc-animate>
+<div class="container" data-section-type="contact" data-components="custom-select" data-cc-animate>
   {% if section.settings.show_page_title %}
     <div class="page-header">
       <h1 class="majortitle">{{ page.title }}</h1>
@@ -80,22 +80,43 @@
                       value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" />
 
                   {% when 'custom_input' %}
-                    {%- assign title_handle = block.settings.title | handle -%}
-                    <label for="contact_{{ title_handle }}">{{ block.settings.title | escape }}</label>
-                    {% if block.settings.type == 'textarea' %}
-                      <textarea
-                        id="contact_{{ title_handle }}"
-                        name="contact[{{ title_handle }}]"
-                        {% if block.settings.required %}required{% endif %}>
-                        {{- form[title_handle] -}}
-                      </textarea>
-                    {% else %}
-                      <input
-                        type="{{ block.settings.type }}"
-                        id="contact_{{ title_handle }}"
-                        name="contact[{{ title_handle }}]"
-                        value="{{ form[title_handle] }}"
-                        {% if block.settings.required %}required{% endif %}/>
+                    {% if block.settings.title != blank %}
+                      {%- assign title_handle = block.settings.title | handle -%}
+                      <label for="contact_{{ title_handle }}">{{ block.settings.title | escape }}</label>
+                      {% if block.settings.type == 'textarea' %}
+                        <textarea
+                          id="contact_{{ title_handle }}"
+                          name="contact[{{ title_handle }}]"
+                          {% if block.settings.required %}required{% endif %}>
+                          {{- form[title_handle] -}}
+                        </textarea>
+                      {% else %}
+                        <input
+                          type="{{ block.settings.type }}"
+                          id="contact_{{ title_handle }}"
+                          name="contact[{{ title_handle }}]"
+                          value="{{ form[title_handle] }}"
+                          {% if block.settings.required %}required{% endif %}/>
+                      {% endif %}
+                    {% endif %}
+
+                  {% when 'custom_dropdown' %}
+                    {% if block.settings.title != blank %}
+                      {%- liquid
+                        assign custom_options = block.settings.multiple_options | newline_to_br | strip_newlines | split: '<br />'
+                        assign input_id = block.settings.title | handle | prepend: 'contact_'
+                        assign input_name = block.settings.title | handle | prepend: 'contact[' | append: ']'
+                      -%}
+                      <div class="option-selector" data-selector-type="dropdown">
+                        {% render 'custom-select',
+                          id: input_id,
+                          label: block.settings.title,
+                          option_values: custom_options,
+                          selected_value: custom_options.first,
+                          include_native: true,
+                          native_name: input_name
+                        %}
+                      </div>
                     {% endif %}
 
                   {% when 'text' %}
@@ -107,7 +128,7 @@
           </div>
 
           <div class="lightly-spaced-row">
-            <input type="submit" value="{{ 'contact.form.send' | t }}" />
+            <button type="submit">{{ 'contact.form.send' | t }}</button>
           </div>
 
         {% endif %}
@@ -210,6 +231,10 @@
         "name": "Custom input",
         "settings": [
           {
+            "type": "paragraph",
+            "content": "Custom inputs require a label, and that label may only be used once in the form."
+          },
+          {
             "type": "text",
             "id": "title",
             "label": "Label",
@@ -244,6 +269,35 @@
             "id": "required",
             "label": "Required",
             "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "half_width",
+            "label": "Half width",
+            "default": false
+          }
+        ]
+      },
+      {
+        "type": "custom_dropdown",
+        "name": "Custom dropdown",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "Custom dropdowns require a label, and that label may only be used once in the form."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Label",
+            "default": "Custom dropdown"
+          },
+          {
+            "type": "textarea",
+            "id": "multiple_options",
+            "label": "Options",
+            "default": "Option 1\nOption 2\nOption 3",
+            "info": "One option on each line"
           },
           {
             "type": "checkbox",

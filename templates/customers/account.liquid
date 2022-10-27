@@ -18,7 +18,7 @@
         {% endif %}
         <p>{{ customer.default_address.city}}, {% if address.province_code %}{{customer.default_address.province_code}}, {% endif %}{{customer.default_address.country}}</p>
         <p>{{ customer.default_address.zip}}</p>
-        <p>{{ customer.default_address.phone }}</p>
+        <p class="address-phone">{{ customer.default_address.phone }}</p>
       {% endif %}
     </div>
 
@@ -45,7 +45,7 @@
         <td class="responsive-table__cell-head">
           <span class="responsive-table__cell-label">{{ 'customer.orders.order_number' | t }}</span>
           {{ order.name | link_to: order.customer_url }}
-          <span class="mobile-only-ib">- {{ order.created_at | date: format: 'month_date_year' }}</span>
+          <span class="mobile-only">- {{ order.created_at | date: format: 'month_date_year' }}</span>
           <span class="responsive-table__cell-head__icon">{% render 'svg-chevron-right' %}</span>
         </td>
         <td class="desktop-only">
@@ -61,7 +61,13 @@
         </td>
         <td>
           <span class="responsive-table__cell-label">{{ 'customer.orders.total' | t }}</span>
-          <span class="total">{{ order.total_price | money }}</span>
+          <span class="total">
+            {%- if settings.cart_currency_code_enabled -%}
+              {{- order.total_price | money_with_currency -}}
+            {%- else -%}
+              {{- order.total_price | money -}}
+            {%- endif -%}
+          </span>
 
           <div class="responsive-table__more">
             <a href="{{ order.customer_url }}">{{ 'customer.orders.full_details_html' | t }}</a>
