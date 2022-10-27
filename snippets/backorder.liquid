@@ -9,7 +9,7 @@
       {{ 'products.product.backorder' | t }}
     </p>
   {% endcapture %}
-  {% if variant.inventory_management == 'shopify' and variant.inventory_quantity < 1 %}
+  {% if variant.inventory_management != blank and variant.inventory_quantity < 1 %}
     <div class="backorder">
       {% if template contains 'cart' %}
         <p>{{ 'cart.general.backorder' | t }}</p>

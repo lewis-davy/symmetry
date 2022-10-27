@@ -1,10 +1,8 @@
-{% assign blog = blogs[section.settings.blog] %}
-{% capture chevron_right %}<span class="icon-small icon-natcol">{% render 'svg-chevron-right' %}</span>{% endcapture %}
-
+{%- assign blog = blogs[section.settings.blog] -%}
 <div class="container strongly-spaced-row blog-row" data-section-type="featured-blog">
   {% unless blog.empty? %}
 
-    <h1 class="hometitle h4-style align-center"><a href="{{ blog.url }}" data-cc-animate>{{ section.settings.title | escape }}</a></h1>
+    <h2 class="hometitle h4-style align-center"><a href="{{ blog.url }}" data-cc-animate>{{ section.settings.title | escape }}</a></h2>
 
     {% if blog.articles.size == 0 %}
 
@@ -24,11 +22,17 @@
               </div>
             {% endif %}
 
-            <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
+            <h3><a href="{{ article.url }}">{{ article.title | escape }}</a></h3>
 
-            <div class="rte">
-              {{ article.excerpt_or_content }}
-            </div>
+            {%- if section.settings.show_excerpts -%}
+              <div class="rte">
+                {%- if article.excerpt.size > 0 -%}
+                  {{ article.excerpt }}
+                {%- else -%}
+                  {{ article.content | strip_html | truncatewords: 30 }}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
 
             <div class="meta">
               <span class="iconmeta time">
@@ -49,7 +53,7 @@
 
   {% else %}
 
-    <h1 class="hometitle h4-style align-center">{{ section.settings.title | escape }}</h1>
+    <h2 class="hometitle h4-style align-center">{{ section.settings.title | escape }}</h2>
 
     <div class="article-list article-layout--columns article-layout--one-row">
       {% for i in (1..section.settings.post_limit) %}
@@ -61,9 +65,11 @@
 
           <h3>{{ 'onboarding.article.title' | t }}</h3>
 
-          <div class="rte">
-            {{ 'onboarding.article.excerpt' | t }}
-          </div>
+          {%- if section.settings.show_excerpts -%}
+            <div class="rte">
+              {{ 'onboarding.article.excerpt' | t }}
+            </div>
+          {%- endif -%}
 
           <div class="meta">
             <span class="iconmeta time">
@@ -122,6 +128,13 @@
         "label": "Show date",
         "default": true
       },
+	    {
+        "type": "checkbox",
+        "id": "show_excerpts",
+        "label": "Show excerpt",
+        "info": "Change excerpts by editing your blog posts. [Learn more](https:\/\/help.shopify.com\/en\/manual\/online-store\/blogs\/writing-blogs#display-an-excerpt-from-a-blog-post)",
+        "default": true
+      },
       {
         "type": "select",
         "id": "crop_ratio",
@@ -154,7 +167,6 @@
     "presets": [
       {
         "name": "Blog posts",
-        "category": "Blog",
         "settings": {
         }
       }

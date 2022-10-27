@@ -9,7 +9,7 @@
       <h4 class="align-center hometitle">{{ section.settings.title }}</h4>
 
       <div class="collection-listing related-collection">
-        <div class="product-list product-list--per-row-{{ section.settings.grid }} product-list--image-shape-{{ settings.prod_thumb_shape }}">
+        <div class="product-list product-list--per-row-{{ section.settings.grid }} product-list--per-row-mob-{{ settings.prod_thumb_mob_per_row }} product-list--image-shape-{{ settings.prod_thumb_shape }}">
           {%- liquid
             if settings.prod_thumb_shape == 'portrait-23'
               assign chosen_aspect_ratio = 0.67
@@ -17,7 +17,9 @@
               assign chosen_aspect_ratio = 0.8
             elsif settings.prod_thumb_shape == 'square'
               assign chosen_aspect_ratio = 1.0
-            elsif settings.prod_thumb_shape == 'landscape'
+            elsif settings.prod_thumb_shape == 'landscape-54'
+              assign chosen_aspect_ratio = 1.25
+            elsif settings.prod_thumb_shape == 'landscape-32'
               assign chosen_aspect_ratio = 1.50
             elsif settings.prod_thumb_shape == 'tallest'
               assign chosen_aspect_ratio = 99

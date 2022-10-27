@@ -7,49 +7,31 @@
       <div class="product-media product-media--image">
         {% render 'responsive-image', image: media.preview_image, min_aspect_ratio: min_aspect_ratio %}
       </div>
-    {% when 'external_video' %}
+    {% when 'external_video', 'video' %}
       <div class="product-media product-media--video product-media--frame"
           data-video-type="external"
           data-video-id="{{ media.external_id }}"
           data-enable-video-looping="{{ section.settings.enable_video_looping }}"
-          style="padding-bottom: {{ 1 | divided_by: media.aspect_ratio | times: 100 }}%;">
-        {{ media | external_video_tag }}
-      </div>
-    {% when 'video' %}
-      {%- comment -%}
-        Load different image sizes depending on the breakpoint for background image overlay
-      {%- endcomment -%}
-      {% style %}
-        @media screen and (max-width: 320px) {
-          .product-media--{{ media.id }} .plyr__poster {
-            background-image: url({{ media.preview_image | img_url: '360x'}}) !important;
-          }
-        }
-
-        @media screen and (min-width: 321px) and (max-width: 780px) {
-          .product-media--{{ media.id }} .plyr__poster {
-            background-image: url({{ media.preview_image | img_url: '900x'}}) !important;
-          }
-        }
-
-        @media screen and (min-width: 781px) and (max-width: 1080px) {
-          .product-media--{{ media.id }} .plyr__poster {
-            background-image: url({{ media.preview_image | img_url: '1080x'}}) !important;
-          }
-        }
-
-        @media screen and (min-width: 1081px) {
-          .product-media--{{ media.id }} .plyr__poster {
-            background-image: url({{ media.preview_image | img_url: '2048x'}}) !important;
-          }
-        }
-      {% endstyle %}
-
-      <div class="product-media product-media--video product-media--{{ media.id }} product-media--frame"
-          data-video-type="shopify"
-          data-enable-video-looping="{{ section.settings.enable_video_looping }}"
-          style="padding-bottom: {{ 1 | divided_by: media.aspect_ratio | times: 100 }}%;">
-        {{ media | video_tag: controls: true, class: 'media-video', image_size: '360x360' }}
+          style="padding-bottom: {{ 1 | divided_by: media.preview_image.aspect_ratio | times: 100 }}%">
+        <div class="product-media__poster lazyload--placeholder">
+          <div class="rimage-background lazyload fade-in"
+            data-bgset="{% render 'bgset', image: media.preview_image %}"
+            data-sizes="auto"
+            data-parent-fit="cover"></div>
+          <button class="product-media__video-play-btn" aria-label="{{ 'general.accessibility_labels.video_play' | t | escape }}">{% render 'icon-video-badge-full-color' %}</button>
+        </div>
+        <template>
+          {%- if media.media_type == 'video' -%}
+            {{ media | media_tag: image_size: '1024x', autoplay: true, loop: section.settings.enable_video_looping, controls: true, preload: 'none', aspect-ratio: media.aspect_ratio }}
+          {%- else -%}
+            {%- assign video_class = 'js-' | append: media.host -%}
+            {%- if media.host == 'youtube' -%}
+              {{ media | external_video_url: autoplay: true, loop: section.settings.enable_video_looping, playlist: media.external_id | external_video_tag: class: video_class, loading: 'lazy', aspect-ratio: media.aspect_ratio }}
+            {%- else -%}
+              {{ media | external_video_url: autoplay: true, loop: section.settings.enable_video_looping | external_video_tag: class: video_class, loading: 'lazy', aspect-ratio: media.aspect_ratio }}
+            {%- endif -%}
+          {%- endif -%}
+        </template>
       </div>
     {% when 'model' %}
       <div class="product-media product-media--model product-media--frame" style="padding-bottom: 100%" data-model-id="{{ media.id }}">

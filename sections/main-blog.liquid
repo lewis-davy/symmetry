@@ -1,4 +1,3 @@
-{% capture chevron_right %}<span class="icon-small icon-natcol">{% render 'svg-chevron-right' %}</span>{% endcapture %}
 <div data-section-type="blog-template">
   {% paginate blog.articles by 12 %}
   <div class="container">
@@ -83,11 +82,17 @@
         </div>
         {% endif %}
 
-        <h2>{{ article.title | link_to: article.url }}</h2>
+        <h2>{{ article.title | escape | link_to: article.url }}</h2>
 
-        <div class="rte cf">
-          {{ article.excerpt_or_content }}
-        </div>
+        {%- if section.settings.show_excerpts -%}
+          <div class="rte cf">
+            {%- if article.excerpt.size > 0 -%}
+              {{ article.excerpt }}
+            {%- else -%}
+              {{ article.content | strip_html | truncatewords: 30 }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
 
         <div class="meta">
           <span class="iconmeta time">
@@ -146,7 +151,7 @@
         "type": "select",
         "id": "layout",
         "label": "Layout",
-        "default": "list",
+        "default": "columns",
         "options": [
           {
             "label": "List",
@@ -160,14 +165,21 @@
       },
       {
         "type": "checkbox",
-        "id": "show_date",
-        "label": "Show date",
+        "id": "show_author",
+        "label": "Show author",
         "default": true
       },
       {
         "type": "checkbox",
-        "id": "show_author",
-        "label": "Show author",
+        "id": "show_date",
+        "label": "Show date",
+        "default": true
+      },
+	    {
+        "type": "checkbox",
+        "id": "show_excerpts",
+        "label": "Show excerpt",
+        "info": "Change excerpts by editing your blog posts. [Learn more](https:\/\/help.shopify.com\/en\/manual\/online-store\/blogs\/writing-blogs#display-an-excerpt-from-a-blog-post)",
         "default": true
       },
       {

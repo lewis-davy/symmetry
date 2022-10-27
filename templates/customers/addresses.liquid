@@ -52,7 +52,7 @@
       </div>
       <div class="input-row">
         <label for="address_phone_new">{{ 'customer.addresses.phone' | t }}</label>
-        <input type="text" id="address_phone_new" class="address_form" name="address[phone]" value="{{form.phone}}" size="40" />
+        <input type="tel" id="address_phone_new" class="address_form" name="address[phone]" value="{{form.phone}}" size="40" />
       </div>
       <div class="input-row">
         <label>
@@ -61,7 +61,7 @@
       </div>
     <div class="action_bottom">
       <p>
-        <input class="btn" type="submit" value="{{ 'customer.addresses.add' | t | escape }}" />
+        <button class="btn" type="submit">{{ 'customer.addresses.add' | t }}</button>
       </p>
       <span class="note"><a href="#" onclick="$('#add_address').toggleClass('hidden'); return false;">{{ 'customer.addresses.cancel' | t }}</a></span>
     </div>
@@ -84,7 +84,7 @@
         <div>{{ address.street }}</div>
         <div>{{ address.city }} {% if address.province_code %}, {{ address.province_code }}{% endif %}</div>
         <div>{{ address.country }} {{ address.zip }}</div>
-        <div>{{ address.phone }}</div>
+        <div class="address-phone">{{ address.phone }}</div>
       </div>
       <p class="address_actions">
         <span class="action_link action_edit">
@@ -155,7 +155,7 @@
           </div>
           <div class="input-row">
             <label for="address_phone_{{form.id}}">{{ 'customer.addresses.phone' | t }}</label>
-            <input type="text" id="address_phone_{{form.id}}" class="address_form" name="address[phone]" value="{{form.phone}}" size="40" />
+            <input type="tel" id="address_phone_{{form.id}}" class="address_form" name="address[phone]" value="{{form.phone}}" size="40" />
           </div>
           <div class="input-row">
             <label>
@@ -163,7 +163,7 @@
             </label>
           </div>
         <div class="action_bottom">
-          <p><input class="btn" type="submit" value="{{ 'customer.addresses.update' | t }}" /></p>
+          <p><button class="btn" type="submit">{{ 'customer.addresses.update' | t }}</button></p>
           <p><span class="note"><a href="#" onclick="$(this).closest('.edit_address').toggleClass('hidden'); return false;">{{ 'customer.addresses.cancel' | t }}</a></span></p>
         </div>
       {% endform %}

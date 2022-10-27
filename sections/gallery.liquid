@@ -3,25 +3,46 @@
     #section-id-{{ section.id }} .gallery__item {
       height: {{ section.settings.mobile_image_height }}px;
     }
+    #section-id-{{ section.id }} .overlay-text__title {
+      font-size: {{ section.settings.title_size_mobile }}px;
+      {%- if section.settings.title_size_mobile >= 90 -%}
+      line-height: 1em;
+      {%- endif %}
+    }
     @media (min-width: 768px) {
       #section-id-{{ section.id }} .gallery__item {
         height: {{ section.settings.desktop_image_height }}px;
+      }
+      #section-id-{{ section.id }} .overlay-text__title {
+        {%- assign title_size_medium = section.settings.title_size | times: 0.7 | at_least: section.settings.title_size_mobile -%}
+        font-size: {{ title_size_medium }}px;
+        {%- if title_size_medium >= 90 -%}
+        line-height: 1em;
+        {%- endif %}
+      }
+    }
+    @media (min-width: 1100px) {
+      #section-id-{{ section.id }} .overlay-text__title {
+        font-size: {{ section.settings.title_size }}px;
+        {%- if section.settings.title_size >= 90 -%}
+        line-height: 1em;
+        {%- endif %}
       }
     }
   {% endstyle %}
 
   {%- capture super_container_class -%}
-    {%- if section.settings.full_width -%}
-      {%- if section.settings.use_alt_bg -%}
-        use-alt-bg
-      {%- endif -%}
-    {%- else -%}
-      {%- if section.settings.use_alt_bg -%}
-        use-alt-bg fully-padded-row--medium fully-padded-row--not-mobile
-      {%- else -%}
-        fully-spaced-row--medium fully-spaced-row--not-mobile
-      {%- endif -%}
-    {%- endif -%}
+    {%- liquid
+      if section.settings.enable_row_spacing
+        if section.settings.use_alt_bg
+          echo 'use-alt-bg fully-padded-row--medium'
+        else
+          echo 'fully-spaced-row--medium'
+        endif
+      elsif section.settings.use_alt_bg
+        echo 'use-alt-bg'
+      endif
+    -%}
   {%- endcapture -%}
 
   <div class="{{ super_container_class }}">
@@ -111,7 +132,7 @@
       "max": 4,
       "step": 1,
       "label": "Max images per row",
-      "default": 3
+      "default": 2
     },
     {
       "type": "range",
@@ -121,7 +142,7 @@
       "step": 10,
       "unit": "px",
       "label": "Desktop image row heights",
-      "default": 300
+      "default": 460
     },
     {
       "type": "range",
@@ -134,9 +155,35 @@
       "default": 400
     },
     {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop heading text size",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile heading text size",
+      "default": 22
+    },
+    {
       "id": "enable_margin",
       "type": "checkbox",
-      "label": "Add spacing",
+      "label": "Add spacing between images",
+      "default": true
+    },
+    {
+      "id": "enable_row_spacing",
+      "type": "checkbox",
+      "label": "Add spacing around section",
       "default": true
     },
     {
@@ -170,6 +217,14 @@
         {
           "value": "box",
           "label": "Box"
+        },
+        {
+          "value": "shadow",
+          "label": "Text shadow"
+        },
+        {
+          "value": "full image-overlay--bg-shadow",
+          "label": "Text shadow and tint"
         },
         {
           "value": "no_background",
@@ -263,13 +318,13 @@
           "type": "text",
           "id": "subheading",
           "label": "Subheading",
-          "default": "Subheading"
+          "default": "Gallery"
         },
         {
           "type": "textarea",
           "id": "title",
           "label": "Heading",
-          "default": "Heading"
+          "default": "Tell your story"
         },
         {
           "type": "text",
@@ -284,7 +339,7 @@
         {
           "type": "select",
           "id": "text_alignment",
-          "label": "Text alignment",
+          "label": "Text overlay position",
           "options": [
             {
               "value": "top left",
@@ -323,7 +378,7 @@
               "label": "Bottom right"
             }
           ],
-          "default": "center center"
+          "default": "bottom left"
         }
       ]
     }
@@ -331,18 +386,26 @@
   "presets": [
     {
       "name": "Gallery",
-      "category": "Image",
       "settings": {
       },
       "blocks": [
         {
-          "type": "image"
+          "type": "image",
+          "settings": {
+            "enlarge_image": true
+          }
         },
         {
           "type": "image"
         },
         {
           "type": "image"
+        },
+        {
+          "type": "image",
+          "settings": {
+            "enlarge_image": true
+          }
         }
       ]
     }

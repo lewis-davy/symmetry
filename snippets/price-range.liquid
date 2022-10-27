@@ -1,9 +1,8 @@
-
 {%- liquid
-  assign currencies_using_comma_decimals = "ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND" | split: ','
   assign uses_comma_decimals = false
-  if currencies_using_comma_decimals contains cart.currency.iso_code
-    assign uses_comma_decimals = true
+  assign currency_test_string = 101 | money_without_currency
+  if currency_test_string == '1,01'
+  	assign uses_comma_decimals = true
   endif
 -%}
 <div class="cc-price-range">
@@ -15,9 +14,9 @@
         name="{{ filter.min_value.param_name }}"
         {%- if filter.min_value.value -%}
           {%- if uses_comma_decimals -%}
-            value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' | round }}"
+            value="{{ filter.min_value.value | money_without_currency | remove: ' ' | remove: "'" | remove: '.' | replace: ',', '.' | round }}"
           {%- else -%}
-            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | round }}"
+            value="{{ filter.min_value.value | money_without_currency | remove: ' ' | remove: "'" | remove: ',' | round }}"
           {%- endif -%}
         {% endif %}
         placeholder="0"
@@ -27,9 +26,9 @@
         step="10"
         min="0"
         {%- if uses_comma_decimals -%}
-          max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' | round }}"
+          max="{{ filter.range_max | money_without_currency | remove: ' ' | remove: "'" | remove: '.' | replace: ',', '.' | round }}"
         {%- else -%}
-          max="{{ filter.range_max | money_without_currency | replace: ',', '' | round }}"
+          max="{{ filter.range_max | money_without_currency | remove: ' ' | remove: "'" | remove: ',' | round }}"
         {% endif %}
         aria-label="{{ 'collections.price_range.min_label' | t | escape }}" />
     </div>
@@ -40,15 +39,15 @@
         name="{{ filter.max_value.param_name }}"
         {%- if filter.max_value.value -%}
           {%- if uses_comma_decimals -%}
-            value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' | round }}"
+            value="{{ filter.max_value.value | money_without_currency | remove: ' ' | remove: "'" | remove: '.' | replace: ',', '.' | round }}"
           {%- else -%}
-            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | round }}"
+            value="{{ filter.max_value.value | money_without_currency | remove: ' ' | remove: "'" | remove: ',' | round }}"
           {% endif %}
         {%- endif -%}
         {%- if uses_comma_decimals -%}
-          placeholder="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' | round }}"
+          placeholder="{{ filter.range_max | money_without_currency | remove: ' ' | remove: "'" | remove: '.' | replace: ',', '.' | round }}"
         {%- else -%}
-          placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' | round }}"
+          placeholder="{{ filter.range_max | money_without_currency | remove: ' ' | remove: "'" | remove: ',' | round }}"
         {% endif %}
         type="text"
         inputmode="numeric"
@@ -56,9 +55,9 @@
         step="10"
         min="0"
         {%- if uses_comma_decimals -%}
-          max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' | round }}"
+          max="{{ filter.range_max | money_without_currency | remove: ' ' | remove: '.' | replace: ',', '.' | round }}"
         {%- else -%}
-          max="{{ filter.range_max | money_without_currency | replace: ',', '' | round }}"
+          max="{{ filter.range_max | money_without_currency | remove: ' ' | remove: ',' | round }}"
         {% endif %}
         aria-label="{{ 'collections.price_range.max_label' | t | escape }}" />
     </div>

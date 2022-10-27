@@ -1,15 +1,41 @@
 <div id="section-id-{{ section.id }}"
      class="{% if section.settings.use_alt_bg %}use-alt-bg fully-padded-row--medium{% else %}fully-spaced-row--medium{% endif %}"
      data-section-type="testimonials">
-  {%- if section.settings.layout contains 'image-' and section.settings.image_shape != 'natural' -%}
-    {%- style -%}
+
+  {%- style -%}
+    {%- if section.settings.layout contains 'image-' and section.settings.image_shape != 'natural' -%}
       {%- for block in section.blocks -%}
         #section-id-{{ section.id }} .testimonial-{{ forloop.index }} .rimage__image {
           object-position: {{ block.settings.image_alignment }};
         }
       {% endfor %}
-    {%- endstyle -%}
-  {%- endif -%}
+    {%- endif -%}
+
+    #section-id-{{ section.id }} .testimonial__blockquote {
+      font-size: {{ section.settings.quote_text_size_mobile }}px;
+      {%- if section.settings.quote_text_size_mobile >= 90 -%}
+      line-height: 1em;
+      {%- endif %}
+    }
+    @media (min-width: 768px) {
+      #section-id-{{ section.id }} .testimonial__blockquote {
+        {%- assign quote_text_size_medium = section.settings.quote_text_size | times: 0.7 | at_least: section.settings.quote_text_size_mobile -%}
+        font-size: {{ quote_text_size_medium }}px;
+        {%- if quote_text_size_medium >= 90 -%}
+        line-height: 1em;
+        {%- endif %}
+      }
+    }
+    @media (min-width: 1100px) {
+      #section-id-{{ section.id }} .testimonial__blockquote {
+        font-size: {{ section.settings.quote_text_size }}px;
+        {%- if section.settings.quote_text_size >= 90 -%}
+        line-height: 1em;
+        {%- endif %}
+      }
+    }
+  {%- endstyle -%}
+
 
   {%- liquid
     assign image_aspect_ratio = false
@@ -27,7 +53,10 @@
   -%}
 
   <div class="container" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.2s">
-    <div class="testimonial-list testimonial-list--{{ section.settings.layout }} testimonial-list--{% if section.settings.layout contains 'image-' %}with-images{% else %}without-images{% endif %}" data-testimonial-count="{{ section.blocks.size }}">
+    <div class="testimonial-list testimonial-list--{{ section.settings.layout }} testimonial-list--{% if section.settings.layout contains 'image-' %}with-images{% else %}without-images{% endif %}"
+        data-testimonial-count="{{ section.blocks.size }}"
+        data-autoplay="{{ section.settings.autoplay }}"
+        data-autoplay-speed="{{ section.settings.autoplay_speed }}000">
       {% if section.settings.title != blank %}
         <div class="subheading">{{ section.settings.title | escape }}</div>
       {% endif %}
@@ -42,7 +71,7 @@
 
               <div class="testimonial__content">
                 {%- if block.settings.star_rating > 0 -%}
-                  <div class="testimonial__star-rating">
+                  <div class="testimonial__star-rating heading-font">
                     {%- for i in (1..block.settings.star_rating) -%}
                     <span class="testimonial__star">{% render 'svg-star' %}</span>
                     {%- endfor -%}
@@ -51,7 +80,7 @@
 
                 {%- if block.settings.testimonial != blank -%}
                   <div class="testimonial__text">
-                    <blockquote class="testimonial__blockquote heading-font h1-style">{{ block.settings.testimonial | escape | newline_to_br }}</blockquote>
+                    <blockquote class="testimonial__blockquote{% if section.settings.text_caps %} testimonial__blockquote--caps{% endif %} heading-font">{{ block.settings.testimonial | escape | newline_to_br }}</blockquote>
                   </div>
                 {%- endif -%}
 
@@ -76,7 +105,7 @@
                   </div>
 
                   {% if block.settings.image_caption != blank %}
-                    <figcaption class="testimonial__image-with-caption__caption">
+                    <figcaption class="testimonial__image-with-caption__caption{% if block.settings.link != blank %} underline{% endif %}">
                       {{ block.settings.image_caption | escape }}
                     </figcaption>
                   {% endif %}
@@ -124,6 +153,32 @@
         "default": "image-right"
       },
       {
+        "type": "checkbox",
+        "id": "text_caps",
+        "label": "Capitalize text",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "quote_text_size",
+        "min": 14,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Desktop quote text size",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "quote_text_size_mobile",
+        "min": 14,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Mobile quote text size",
+        "default": 20
+      },
+      {
         "type": "select",
         "id": "image_shape",
         "label": "Image shape",
@@ -152,6 +207,22 @@
         "id": "use_alt_bg",
         "label": "Use alternate section color",
         "default": false
+      },
+      {
+        "id": "autoplay",
+        "type": "checkbox",
+        "label": "Auto-rotate testimonials",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "autoplay_speed",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "unit": "s",
+        "label": "Change testimonials every",
+        "default": 5
       }
     ],
     "blocks": [
@@ -173,7 +244,7 @@
             "id": "testimonial",
             "label": "Testimonial",
             "default": "Add customer reviews and testimonials to showcase your store’s happy customers.",
-            "info": "For best results, keep the word count consistent in each quote"
+            "info": "For best results, keep the word count similar in each quote"
           },
           {
             "type": "text",
@@ -248,7 +319,6 @@
     "presets": [
       {
         "name": "Testimonials",
-        "category": "Text",
         "settings": {},
         "blocks": [
           {

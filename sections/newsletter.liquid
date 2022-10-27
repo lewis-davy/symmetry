@@ -15,7 +15,7 @@
   </style>
   <div class="container strongly-padded-row align-center" data-cc-animate data-cc-animate-delay="0.3s">
 
-    <h1 class="hometitle h4-style in-content">{{ section.settings.title | escape }}</h1>
+    <h2 class="hometitle h4-style in-content">{{ section.settings.title | escape }}</h2>
 
     <div class="rte lightly-spaced-row">{{ section.settings.subheading }}</div>
 
@@ -40,7 +40,8 @@
               class="signup-form__email"
               value=""
               name="contact[email]"
-              aria-label="{{ 'layout.signup.input_label' | t | escape }}" />
+              aria-label="{{ 'layout.signup.input_label' | t | escape }}"
+              required />
             <button class="button signup-form__button" type="submit">
               {{- 'layout.signup.submit' | t -}}
             </button>
@@ -82,7 +83,6 @@
     "presets": [
       {
         "name": "Newsletter",
-        "category": "Promotional",
         "settings": {}
       }
     ]
